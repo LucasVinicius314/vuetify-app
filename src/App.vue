@@ -2,82 +2,38 @@
   <v-app id="inspire">
     <v-system-bar app>
       <v-spacer></v-spacer>
-
       <v-icon>mdi-square</v-icon>
-
       <v-icon>mdi-circle</v-icon>
-
       <v-icon>mdi-triangle</v-icon>
     </v-system-bar>
 
     <v-app-bar app>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-
-      <v-toolbar-title>Application</v-toolbar-title>
+      <v-toolbar-title>Products</v-toolbar-title>
     </v-app-bar>
 
     <v-navigation-drawer v-model="drawer" fixed temporary>
-      <!--  -->
     </v-navigation-drawer>
 
-    <v-main class="grey lighten-2">
-      <v-container>
-        <v-row>
-          <template v-for="n in 4">
-            <v-col :key="n" class="mt-2" cols="12">
-              <strong>Category {{ n }}</strong>
-            </v-col>
-            <v-col v-for="j in 6" :key="`${n}${j}`" cols="6" md="2">
-              <Card :title="'Title'" />
-            </v-col>
-          </template>
-        </v-row>
-        <v-row>
-          <template v-for="(category, k) in categories">
-            <v-col :key="k" class="mt-2" cols="12">
-              <strong>{{ category.name }}</strong>
-            </v-col>
-            <!-- <v-col v-for="" :key="`${n}${j}`" cols="6" md="2">
-              <Card :title="'aaa'" />
-            </v-col> -->
-          </template>
-        </v-row>
-      </v-container>
-    </v-main>
+    <Products />
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import Card from "./components/Card.vue";
-import { axios } from "./services/api";
+import Products from "./pages/Products.vue";
 
 export default Vue.extend({
   name: "App",
 
   components: {
-    Card,
+    Products,
   },
 
-  created: function () {
-    this.getCategories();
-  },
-
-  methods: {
-    getCategories: async function () {
-      axios
-        .get("/category/all")
-        .then((response) => {
-          console.log(response);
-          this.categories = response.data;
-        })
-        .catch(console.log);
-    },
-  },
+  methods: {},
 
   data: () => ({
     drawer: null,
-    categories: [],
   }),
 });
 </script>
