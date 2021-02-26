@@ -1,8 +1,10 @@
 <template>
-  <v-card>
-    <v-card-title v-for="(item, k) in items" :key="k" :style="item.style">
-      {{ item.title }}
-    </v-card-title>
+  <v-card v-if="visible">
+    <v-card-title>{{ title }}</v-card-title>
+    <v-card-text v-for="(item, k) in items" :key="k" :style="item.style">
+      {{ item.text }}
+    </v-card-text>
+    <v-btn @click="toggleVisible">Hide</v-btn>
   </v-card>
 </template>
 
@@ -17,11 +19,22 @@ const rcg = () => {
 export default Vue.extend({
   name: "Card",
 
+  props: {
+    title: String,
+  },
+
   data: () => ({
+    visible: true,
     items: [
-      { title: "Yes", style: `color: ${rcg()}` },
-      { title: "sada", style: `color: ${rcg()}` },
+      { text: "One", style: `color: ${rcg()}` },
+      { text: "Two", style: `color: ${rcg()}` },
     ],
   }),
+
+  methods: {
+    toggleVisible: function () {
+      this.visible = !this.visible;
+    },
+  },
 });
 </script>

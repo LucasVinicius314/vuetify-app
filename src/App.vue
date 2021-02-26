@@ -27,11 +27,19 @@
             <v-col :key="n" class="mt-2" cols="12">
               <strong>Category {{ n }}</strong>
             </v-col>
-
             <v-col v-for="j in 6" :key="`${n}${j}`" cols="6" md="2">
-              <!-- <v-sheet height="150"></v-sheet> -->
-              <Card />
+              <Card :title="'Title'" />
             </v-col>
+          </template>
+        </v-row>
+        <v-row>
+          <template v-for="(category, k) in categories">
+            <v-col :key="k" class="mt-2" cols="12">
+              <strong>{{ category.name }}</strong>
+            </v-col>
+            <!-- <v-col v-for="" :key="`${n}${j}`" cols="6" md="2">
+              <Card :title="'aaa'" />
+            </v-col> -->
           </template>
         </v-row>
       </v-container>
@@ -42,6 +50,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Card from "./components/Card.vue";
+import { axios } from "./services/api";
 
 export default Vue.extend({
   name: "App",
@@ -50,6 +59,25 @@ export default Vue.extend({
     Card,
   },
 
-  data: () => ({ drawer: null }),
+  created: function () {
+    this.getCategories();
+  },
+
+  methods: {
+    getCategories: async function () {
+      axios
+        .get("/category/all")
+        .then((response) => {
+          console.log(response);
+          this.categories = response.data;
+        })
+        .catch(console.log);
+    },
+  },
+
+  data: () => ({
+    drawer: null,
+    categories: [],
+  }),
 });
 </script>
