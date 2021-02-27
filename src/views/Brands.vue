@@ -1,5 +1,5 @@
 <template>
-  <v-main class="grey lighten-2">
+  <v-main>
     <v-container>
       <v-row>
         <v-col cols="12" md="4">

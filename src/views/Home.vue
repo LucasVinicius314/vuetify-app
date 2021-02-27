@@ -1,5 +1,5 @@
 <template>
-  <v-main class="grey lighten-2">
+  <v-main>
     <v-container>
       <h1>Home</h1>
     </v-container>
