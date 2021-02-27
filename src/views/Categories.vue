@@ -10,23 +10,13 @@
                 There are no categories
               </v-card-text>
               <v-list-item-group>
-                <v-list-item :key="k" v-for="(category, k) in categories">
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      {{ category.name }}
-                    </v-list-item-title>
-                  </v-list-item-content>
-                  <v-list-item-action>
-                    <v-btn icon @click="selectCategory(category.id)">
-                      <v-icon>mdi-pencil</v-icon>
-                    </v-btn>
-                  </v-list-item-action>
-                  <v-list-item-action>
-                    <v-btn icon @click="deleteCategory(category.id)">
-                      <v-icon>mdi-delete</v-icon>
-                    </v-btn>
-                  </v-list-item-action>
-                </v-list-item>
+                <CategoryItem
+                  :key="k"
+                  v-for="(category, k) in categories"
+                  :category="category"
+                  @category-select="selectCategory"
+                  @category-delete="deleteCategory"
+                />
               </v-list-item-group>
             </v-list>
           </v-card>
@@ -91,6 +81,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import CategoryItem from "../components/CategoryItem.vue";
 import { axios } from "../services/api";
 
 type Category = {
@@ -100,6 +91,10 @@ type Category = {
 
 export default Vue.extend({
   name: "Categories",
+
+  components: {
+    CategoryItem,
+  },
 
   created: function () {
     this.getCategories();

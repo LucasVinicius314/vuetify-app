@@ -13,6 +13,11 @@
               <v-list-item-title>Home</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <v-list-item to="/brands">
+            <v-list-item-content>
+              <v-list-item-title>Brands</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <v-list-item to="/categories">
             <v-list-item-content>
               <v-list-item-title>Categories</v-list-item-title>
