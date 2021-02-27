@@ -6,14 +6,28 @@
       </v-list-item-title>
     </v-list-item-content>
     <v-list-item-action>
-      <v-btn icon @click="$emit('category-select', category.id)">
-        <v-icon>mdi-pencil</v-icon>
-      </v-btn>
+      <v-hover v-slot="{ hover }">
+        <v-btn
+          icon
+          @click="$emit('category-select', category.id)"
+          :class="{ 'on-hover': hover }"
+          :color="hover ? 'blue' : 'auto'"
+        >
+          <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+      </v-hover>
     </v-list-item-action>
     <v-list-item-action>
-      <v-btn icon @click="$emit('category-delete', category.id)">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
+      <v-hover v-slot="{ hover }">
+        <v-btn
+          icon
+          @click="$emit('category-delete', category.id)"
+          :class="{ 'on-hover': hover }"
+          :color="hover ? 'red' : 'auto'"
+        >
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </v-hover>
     </v-list-item-action>
   </v-list-item>
 </template>
@@ -32,9 +46,5 @@ export default Vue.extend({
   props: {
     category: Object as PropType<Category>,
   },
-
-  data: () => ({
-    hover: false as boolean,
-  }),
 });
 </script>
