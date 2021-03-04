@@ -108,13 +108,13 @@ export default Vue.extend({
   data: () => ({
     brands: [] as Brand[],
     newBrand: {
-      id: 0 as number,
-      name: "" as string,
-    },
+      id: 0,
+      name: "",
+    } as Brand,
     selectedBrand: {
-      id: 0 as number,
-      name: "" as string,
-    },
+      id: 0,
+      name: "",
+    } as Brand,
   }),
 
   methods: {

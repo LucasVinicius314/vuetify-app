@@ -4,6 +4,7 @@ import About from '../views/About.vue'
 import Brands from '../views/Brands.vue'
 import Categories from '../views/Categories.vue'
 import Home from '../views/Home.vue'
+import Products from '../views/Products.vue'
 import Vue from 'vue'
 
 Vue.use(VueRouter)
@@ -15,9 +16,9 @@ const routes: Array<RouteConfig> = [
     component: Home,
   },
   {
-    path: '/about',
-    name: 'About',
-    component: About,
+    path: '/brands',
+    name: 'Brands',
+    component: Brands,
   },
   {
     path: '/categories',
@@ -25,9 +26,14 @@ const routes: Array<RouteConfig> = [
     component: Categories,
   },
   {
-    path: '/brands',
-    name: 'Brands',
-    component: Brands,
+    path: '/products',
+    name: 'Products',
+    component: Products,
+  },
+  {
+    path: '/about',
+    name: 'About',
+    component: About,
   },
 ]
 

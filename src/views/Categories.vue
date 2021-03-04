@@ -108,13 +108,13 @@ export default Vue.extend({
   data: () => ({
     categories: [] as Category[],
     newCategory: {
-      id: 0 as number,
-      name: "" as string,
-    },
+      id: 0,
+      name: "",
+    } as Category,
     selectedCategory: {
-      id: 0 as number,
-      name: "" as string,
-    },
+      id: 0,
+      name: "",
+    } as Category,
   }),
 
   methods: {

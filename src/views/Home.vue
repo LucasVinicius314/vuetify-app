@@ -1,7 +1,7 @@
 <template>
   <v-main>
     <v-container>
-      <h1>Home</h1>
+      <h1 class="text-h1">Home</h1>
     </v-container>
   </v-main>
 </template>

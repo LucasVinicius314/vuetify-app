@@ -8,26 +8,16 @@
     <v-navigation-drawer v-model="drawer" fixed temporary>
       <v-list>
         <v-list-item-group>
-          <v-list-item to="/">
-            <v-list-item-content>
-              <v-list-item-title>Home</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item to="/brands">
-            <v-list-item-content>
-              <v-list-item-title>Brands</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item to="/categories">
-            <v-list-item-content>
-              <v-list-item-title>Categories</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item to="/about">
-            <v-list-item-content>
-              <v-list-item-title>About</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+          <template v-for="(item, k) in items">
+            <v-list-item :to="item.to" :key="k">
+              <v-list-item-content>
+                <v-list-item-title>{{ item.label }}</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-action>
+            </v-list-item>
+          </template>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -44,6 +34,33 @@ export default Vue.extend({
 
   data: () => ({
     drawer: false,
+    items: [
+      {
+        to: "/",
+        label: "Home",
+        icon: "mdi-home",
+      },
+      {
+        to: "/brands",
+        label: "Brands",
+        icon: "mdi-watermark",
+      },
+      {
+        to: "/categories",
+        label: "Categories",
+        icon: "mdi-tag",
+      },
+      {
+        to: "/products",
+        label: "Products",
+        icon: "mdi-cart",
+      },
+      {
+        to: "/about",
+        label: "About",
+        icon: "mdi-information",
+      },
+    ],
   }),
 });
 </script>
