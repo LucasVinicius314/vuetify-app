@@ -12,8 +12,8 @@
               <v-list-item-group>
                 <BrandItem
                   :key="k"
-                  v-for="(brand, k) in brands"
                   :brand="brand"
+                  v-for="(brand, k) in brands"
                   @brand-select="selectBrand"
                   @brand-delete="deleteBrand"
                 />
