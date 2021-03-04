@@ -12,8 +12,8 @@
               <v-list-item-group>
                 <CategoryItem
                   :key="k"
-                  v-for="(category, k) in categories"
                   :category="category"
+                  v-for="(category, k) in categories"
                   @category-select="selectCategory"
                   @category-delete="deleteCategory"
                 />
@@ -23,16 +23,19 @@
         </v-col>
         <v-col cols="12" md="8">
           <v-card>
-            <v-form @submit.prevent="createCategory">
+            <v-form
+              lazy-validation
+              ref="createForm"
+              @submit.prevent="createCategory"
+            >
               <v-card-text>
                 <v-card-title>Create Category</v-card-title>
                 <v-text-field
                   class="mb-2"
-                  v-model="newCategoryName"
-                  :rules="['required']"
                   counter="25"
                   label="Category name"
-                  placeholder="Category name"
+                  v-model="newCategory.name"
+                  :rules="[(v) => !!v || 'Required']"
                 />
                 <v-card-actions>
                   <v-btn type="submit">Create</v-btn>
@@ -41,30 +44,32 @@
             </v-form>
           </v-card>
           <v-card class="mt-5">
-            <v-form @submit.prevent="updateCategory">
+            <v-form
+              lazy-validation
+              ref="updateForm"
+              @submit.prevent="updateCategory"
+            >
               <v-card-text>
                 <v-card-title>Update Category</v-card-title>
-                <v-flex v-if="selectedCategoryId === 0">
+                <v-flex v-if="selectedCategory.id === 0">
                   <v-card-text>Select a category to edit</v-card-text>
                 </v-flex>
                 <template v-else>
                   <v-text-field
+                    disabled
                     class="mb-2"
-                    v-model="selectedCategoryId"
-                    :rules="['required']"
                     counter="25"
                     type="number"
-                    disabled
                     label="Category ID"
-                    placeholder="Category ID"
+                    v-model="selectedCategory.id"
+                    :rules="[(v) => !!v || 'Required']"
                   />
                   <v-text-field
                     class="mb-2"
-                    v-model="selectedCategoryName"
-                    :rules="['required']"
                     counter="25"
                     label="Category name"
-                    placeholder="Category name"
+                    v-model="selectedCategory.name"
+                    :rules="[(v) => !!v || 'Required']"
                   />
                   <v-card-actions>
                     <v-btn type="submit">Update</v-btn>
@@ -102,29 +107,41 @@ export default Vue.extend({
 
   data: () => ({
     categories: [] as Category[],
-    newCategoryName: "" as string,
-    selectedCategoryId: 0 as number,
-    selectedCategoryName: "" as string,
+    newCategory: {
+      id: 0 as number,
+      name: "" as string,
+    },
+    selectedCategory: {
+      id: 0 as number,
+      name: "" as string,
+    },
   }),
 
   methods: {
     createCategory: function () {
-      const _category: Category = {
-        id: 0,
-        name: this.newCategoryName,
-      };
-      axios
-        .post(`/category/create`, _category)
-        .then((response) => {
-          console.log(response);
-          this.getCategories();
-        })
-        .catch(console.log);
+      if ((this.$refs.createForm as HTMLFormElement).validate()) {
+        const _category: Category = {
+          id: this.newCategory.id,
+          name: this.newCategory.name,
+        };
+        axios
+          .post(`/category/create`, _category)
+          .then((response) => {
+            console.log(response);
+            this.getCategories();
+          })
+          .catch(console.log);
+      }
     },
     getCategories: async function () {
-      this.newCategoryName = "";
-      this.selectedCategoryId = 0;
-      this.selectedCategoryName = "";
+      this.newCategory = {
+        id: 0,
+        name: "",
+      };
+      this.selectedCategory = {
+        id: 0,
+        name: "",
+      };
       axios
         .get("/category/all")
         .then((response) => {
@@ -134,17 +151,19 @@ export default Vue.extend({
         .catch(console.log);
     },
     updateCategory: function () {
-      const _category: Category = {
-        id: this.selectedCategoryId,
-        name: this.selectedCategoryName,
-      };
-      axios
-        .post(`/category/update/${_category.id}`, _category)
-        .then((response) => {
-          console.log(response);
-          this.getCategories();
-        })
-        .catch(console.log);
+      if ((this.$refs.updateForm as HTMLFormElement).validate()) {
+        const _category: Category = {
+          id: this.selectedCategory.id,
+          name: this.selectedCategory.name,
+        };
+        axios
+          .post(`/category/update/${_category.id}`, _category)
+          .then((response) => {
+            console.log(response);
+            this.getCategories();
+          })
+          .catch(console.log);
+      }
     },
     deleteCategory: function (id: number) {
       axios
@@ -157,8 +176,10 @@ export default Vue.extend({
     },
     selectCategory: function (id: number) {
       const _category = this.categories.find((f) => f.id === id);
-      this.selectedCategoryId = _category?.id || 0;
-      this.selectedCategoryName = _category?.name || "";
+      this.selectedCategory = {
+        id: _category?.id || 0,
+        name: _category?.name || "",
+      };
     },
   },
 });

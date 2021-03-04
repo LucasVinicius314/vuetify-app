@@ -23,16 +23,19 @@
         </v-col>
         <v-col cols="12" md="8">
           <v-card>
-            <v-form @submit.prevent="createBrand">
+            <v-form
+              lazy-validation
+              ref="createForm"
+              @submit.prevent="createBrand"
+            >
               <v-card-text>
                 <v-card-title>Create Brand</v-card-title>
                 <v-text-field
                   class="mb-2"
-                  v-model="newBrandName"
-                  :rules="['required']"
                   counter="25"
                   label="Brand name"
-                  placeholder="Brand name"
+                  v-model="newBrand.name"
+                  :rules="[(v) => !!v || 'Required']"
                 />
                 <v-card-actions>
                   <v-btn type="submit">Create</v-btn>
@@ -41,30 +44,32 @@
             </v-form>
           </v-card>
           <v-card class="mt-5">
-            <v-form @submit.prevent="updateBrand">
+            <v-form
+              ref="updateForm"
+              lazy-validation
+              @submit.prevent="updateBrand"
+            >
               <v-card-text>
                 <v-card-title>Update Brand</v-card-title>
-                <v-flex v-if="selectedBrandId === 0">
+                <v-flex v-if="selectedBrand.id === 0">
                   <v-card-text>Select a brand to edit</v-card-text>
                 </v-flex>
                 <template v-else>
                   <v-text-field
+                    disabled
                     class="mb-2"
-                    v-model="selectedBrandId"
-                    :rules="['required']"
                     counter="25"
                     type="number"
-                    disabled
                     label="Brand ID"
-                    placeholder="Brand ID"
+                    v-model="selectedBrand.id"
+                    :rules="[(v) => !!v || 'Required']"
                   />
                   <v-text-field
                     class="mb-2"
-                    v-model="selectedBrandName"
-                    :rules="['required']"
                     counter="25"
                     label="Brand name"
-                    placeholder="Brand name"
+                    v-model="selectedBrand.name"
+                    :rules="[(v) => !!v || 'Required']"
                   />
                   <v-card-actions>
                     <v-btn type="submit">Update</v-btn>
@@ -102,29 +107,41 @@ export default Vue.extend({
 
   data: () => ({
     brands: [] as Brand[],
-    newBrandName: "" as string,
-    selectedBrandId: 0 as number,
-    selectedBrandName: "" as string,
+    newBrand: {
+      id: 0 as number,
+      name: "" as string,
+    },
+    selectedBrand: {
+      id: 0 as number,
+      name: "" as string,
+    },
   }),
 
   methods: {
     createBrand: function () {
-      const _brand: Brand = {
-        id: 0,
-        name: this.newBrandName,
-      };
-      axios
-        .post(`/brand/create`, _brand)
-        .then((response) => {
-          console.log(response);
-          this.getBrands();
-        })
-        .catch(console.log);
+      if ((this.$refs.createForm as HTMLFormElement).validate()) {
+        const _brand: Brand = {
+          id: this.newBrand.id,
+          name: this.newBrand.name,
+        };
+        axios
+          .post(`/brand/create`, _brand)
+          .then((response) => {
+            console.log(response);
+            this.getBrands();
+          })
+          .catch(console.log);
+      }
     },
     getBrands: async function () {
-      this.newBrandName = "";
-      this.selectedBrandId = 0;
-      this.selectedBrandName = "";
+      this.newBrand = {
+        id: 0,
+        name: "",
+      };
+      this.selectedBrand = {
+        id: 0,
+        name: "",
+      };
       axios
         .get("/brand/all")
         .then((response) => {
@@ -134,17 +151,19 @@ export default Vue.extend({
         .catch(console.log);
     },
     updateBrand: function () {
-      const _brand: Brand = {
-        id: this.selectedBrandId,
-        name: this.selectedBrandName,
-      };
-      axios
-        .post(`/brand/update/${_brand.id}`, _brand)
-        .then((response) => {
-          console.log(response);
-          this.getBrands();
-        })
-        .catch(console.log);
+      if ((this.$refs.updateForm as HTMLFormElement).validate()) {
+        const _brand: Brand = {
+          id: this.selectedBrand.id,
+          name: this.selectedBrand.name,
+        };
+        axios
+          .post(`/brand/update/${_brand.id}`, _brand)
+          .then((response) => {
+            console.log(response);
+            this.getBrands();
+          })
+          .catch(console.log);
+      }
     },
     deleteBrand: function (id: number) {
       axios
@@ -157,8 +176,10 @@ export default Vue.extend({
     },
     selectBrand: function (id: number) {
       const _brand = this.brands.find((f) => f.id === id);
-      this.selectedBrandId = _brand?.id || 0;
-      this.selectedBrandName = _brand?.name || "";
+      this.selectedBrand = {
+        id: _brand?.id || 0,
+        name: _brand?.name || "",
+      };
     },
   },
 });
